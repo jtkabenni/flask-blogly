@@ -1,0 +1,15 @@
+img {
+  object-fit: cover;
+  width: 100px;
+  height: 100px;
+}
+
+.user-details,
+.update-buttons {
+  display: flex;
+}
+
+/* button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+} */

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="POST">
+  <h1>{{ form_title }}</h1>
+
+  {% if post %}
+  <p>Title: <input name="title" value="{{ post.title }}"></p>
+  <p>Content: <textarea id="content" name="content" rows="4" cols="50" value="">{{ post.content }}</textarea></p>
+  {% else %}
+  <p>Title: <input name="title"></p>
+  <p>Content: <textarea id="content" name="content" rows="4" cols="50"></textarea></p>
+  {% endif %}
+
+
+  <button>Save</button>
+</form>
+{% endblock %}
