@@ -48,7 +48,7 @@ def show_user(user_id):
     posts = user.posts
     return render_template("user_details.html", user=user, posts=posts)
 
-@app.route("/<int:user_id>/delete", methods=["POST"])
+@app.route("/users/<int:user_id>/delete", methods=["POST"])
 def delete_user(user_id):
     """Delete user"""
     user = User.query.filter_by(id=user_id).first()
@@ -56,7 +56,7 @@ def delete_user(user_id):
     db.session.commit()
     return redirect ('/users')
 
-@app.route("/<int:user_id>/edit")
+@app.route("/users/<int:user_id>/edit")
 def edit_user_form(user_id):
     """Display edit user form"""
     user = User.query.get_or_404(user_id)
@@ -70,7 +70,7 @@ def edit_user(user_id):
     user.last_name = request.form["last-name"]
     user.image_url = request.form["image-url"]
     db.session.commit()
-    return redirect (f'/{user.id}')
+    return redirect (f'/users/{user.id}')
 
 @app.route("/posts/<int:post_id>")
 def show_post(post_id):

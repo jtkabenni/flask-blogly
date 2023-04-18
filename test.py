@@ -18,22 +18,36 @@ class UserViewsTests(unittest.TestCase):
     db.session.commit()
     self.user_id=user1.id
   def tearDown(self):
+    """Roll back any changes"""
     db.session.rollback()
 
   def test_lists_users(self):
+    """Test if user shows up in list"""
     with app.test_client() as client:
       resp = client.get("/users")
       html = resp.get_data(as_text=True)
       self.assertEqual(resp.status_code, 200)
       self.assertIn('Bean Bo', html)
+  def test_details_user(self):
+    """ Test if user details show up on details page"""
+    with app.test_client() as client:
+      resp = client.get(f"/users/{self.user_id}")
+      html = resp.get_data(as_text=True)
+      self.assertEqual(resp.status_code, 200)
+      self.assertIn("Bean Bo's posts", html)
+
+  def test_delete_user(self):
+    """Test if user is deleted from users list"""
+    with app.test_client() as client:
+      resp = client.post(f"/users/{self.user_id}/delete", follow_redirects=True)
+      html = resp.get_data(as_text=True)
+      self.assertEqual(resp.status_code, 200)
+      self.assertNotIn('Bean Bo', html)
 
 class PostViewsTests(unittest.TestCase):
   def setUp(self):
     """Add sample user"""
-
     User.query.delete()
-
-    
     user1 =  User(first_name = 'Bean', last_name = "Bo", image_url = "http://clipart-library.com/img/1015367.jpg")
     db.session.add(user1)
     db.session.commit()
@@ -41,19 +55,37 @@ class PostViewsTests(unittest.TestCase):
     post2 = Post(title = 'My second title', content = 'My second content', user_id = user1.id)
     db.session.add_all([post1,post2])
     db.session.commit()
-
     self.user_id=user1.id
+    self.post1_id=post1.id
+    self.post2_id=post2.id
   def tearDown(self):
     db.session.rollback()
 
   def test_lists_posts(self):
+    """Test if posts shows up in list"""
     with app.test_client() as client:
       resp = client.get("/")
       html = resp.get_data(as_text=True)
-
       self.assertEqual(resp.status_code, 200)
       self.assertIn('My title', html)
       self.assertIn('My second title', html)
+
+  def test_details_post(self):
+    """ Test if user details show up on details page"""
+    with app.test_client() as client:
+      resp = client.get(f"/posts/{self.post1_id}")
+      html = resp.get_data(as_text=True)
+      self.assertEqual(resp.status_code, 200)
+      self.assertIn('My title', html)
+      self.assertIn('<button>Edit post</button>', html)
+
+  def test_delete_post(self):
+    """Test if user is deleted from users list"""
+    with app.test_client() as client:
+      resp = client.post(f"/posts/{self.post1_id}/delete", follow_redirects=True)
+      html = resp.get_data(as_text=True)
+      self.assertEqual(resp.status_code, 200)
+      self.assertNotIn('My title', html)
 
 class TagViewsTests(unittest.TestCase):
   def setUp(self):
@@ -83,4 +115,30 @@ class TagViewsTests(unittest.TestCase):
       html = resp.get_data(as_text=True)
       self.assertEqual(resp.status_code, 200)
       self.assertIn('funny', html)
+      self.assertIn('eww', html)
+  def test_details_tag(self):
+    """ Test if tag details show up on tag details page"""
+    with app.test_client() as client:
+      resp = client.get(f"/tags/{self.tag1_id}")
+      html = resp.get_data(as_text=True)
+      self.assertEqual(resp.status_code, 200)
+      self.assertIn('funny', html)
+      self.assertIn('Posts with this tag:', html)
+    
+  def test_post_details_tag(self):
+    """ Test if user details show up on details page"""
+    with app.test_client() as client:
+      resp = client.get(f"/posts/{self.post1_id}")
+      html = resp.get_data(as_text=True)
+      self.assertEqual(resp.status_code, 200)
+      self.assertIn('My title', html)
+      self.assertIn('<span class="tag">eww</span>', html)
+
+  def test_delete_tag(self):
+    """Test if tag is deleted from tags list"""
+    with app.test_client() as client:
+      resp = client.post(f"/tags/{self.tag1_id}/delete", follow_redirects=True)
+      html = resp.get_data(as_text=True)
+      self.assertEqual(resp.status_code, 200)
+      self.assertNotIn('funny', html)
 
