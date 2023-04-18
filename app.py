@@ -27,7 +27,7 @@ def list_users():
 @app.route('/users/new')
 def display_form():
     """Display form to add user"""
-    return render_template('add_user.html')
+    return render_template('add_edit_user.html', form_title = "Add new user")
 
 @app.route('/users/new', methods=["POST"])
 def create_user():
@@ -60,9 +60,9 @@ def delete_user(user_id):
 def edit_user_form(user_id):
     """Display edit user form"""
     user = User.query.get_or_404(user_id)
-    return render_template("edit_user.html", user=user)
+    return render_template("add_edit_user.html", user=user, form_title = "Edit user")
 
-@app.route("/<int:user_id>/edit", methods=["POST"])
+@app.route("/users/<int:user_id>/edit", methods=["POST"])
 def edit_user(user_id):
     """Edit user"""
     user = User.query.filter_by(id=user_id).first()

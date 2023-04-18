@@ -6,8 +6,8 @@
   <div>
     <h2>{{ user.first_name }} {{ user.last_name }}</h2>
     <div class="update-buttons">
-      <div><a href="/{{ user.id }}/edit"><button>Edit user</button></a></div>
-      <form action="/{{ user.id }}/delete" method="POST">
+      <div><a href="/users/{{ user.id }}/edit"><button>Edit user</button></a></div>
+      <form action="/users/{{ user.id }}/delete" method="POST">
         <button>Delete user</button>
       </form>
     </div>
