@@ -1,4 +1,4 @@
-from models import User, Post, db
+from models import User, Post, db, Tag, PostTag
 from app import app
 
 db.drop_all()
@@ -16,4 +16,12 @@ post2 = Post(title = 'My second title', content = 'My second content My second c
 post3 = Post(title = 'Lizzie''s first title', content = 'My first post!!!', user_id = 2)
 db.session.add_all([post1, post2, post3])
 db.session.commit()
+
+tag1 = Tag(name = 'funny', posttags = [PostTag(post_id =post1.id), PostTag(post_id = post2.id)])
+tag2 = Tag(name = 'eww', posttags = [PostTag(post_id =post1.id), PostTag(post_id = post3.id)])
+tag3 = Tag(name = 'interesting')
+db.session.add_all([tag1, tag2, tag3])
+db.session.commit()
+
+
 

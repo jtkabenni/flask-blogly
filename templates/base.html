@@ -11,14 +11,34 @@
 </head>
 
 <body>
-  {% block content %}
-  <h2>Users</h2>
-  {% for user in users %}
-  <li><a href="/users/{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</a></li>
-  {% endfor %}
-  <div id="content"><a href="/users/new"><button> Add user</button></a></div>
-  {% endblock %}
+  <nav>
+    <div class="nav-links">
+      <a href="/">All posts</a>
+      <a href="/users">Users</a>
+      <a href="/tags">Tags</a>
+    </div>
+    <div class="add-links">
+      <a href="/users/new">Add user</a>
+      <a href="/tags/new">Add tag</a>
+    </div>
 
+  </nav>
+  <section>
+    {% block content %}
+
+    <h1>All posts</h1>
+    {% for post in posts %}
+
+    <div class='post'>
+      <h3><a href="/posts/{{post.id}}">{{ post.title }}</a></h3>
+      <p>{{ post.content }}</p>
+      <p>By: <a href="/users/{{post.user.id}}">{{ post.user.first_name }} {{ post.user.last_name }}</a></p>
+    </div>
+
+    {% endfor %}
+
+    {% endblock %}
+  </section>
 </body>
 
 </html>

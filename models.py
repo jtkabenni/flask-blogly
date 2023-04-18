@@ -18,7 +18,7 @@ class User(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     image_url = db.Column(db.String(150), nullable=True, default = default_img)
 
-    posts = db.relationship("Post", backref="user", cascade="all, delete, delete-orphan")
+    posts = db.relationship("Post", backref="user", passive_deletes=True)
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -27,6 +27,22 @@ class Post(db.Model):
     title = db.Column(db.String(50), nullable=False)
     content = db.Column(db.String(1500), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default = datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+
+    posttags = db.relationship('PostTag', backref = 'post', cascade="all, delete, delete-orphan")
+    tags = db.relationship('Tag', secondary = 'posttags', backref = 'posts')
+
+
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    name = db.Column(db.String(30), nullable=False)
+
+    posttags = db.relationship('PostTag', backref = 'tag',passive_deletes=True)
+
+class PostTag(db.Model):
+    __tablename__ = 'posttags'
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id",ondelete='CASCADE'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey("tags.id",ondelete='CASCADE'), primary_key=True)
 
 

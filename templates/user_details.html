@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<a href='/users'>Go home</a>
+
 <div class='user-details'>
   <img src="{{ user.image_url}}">
   <div>
@@ -14,7 +14,7 @@
   </div>
 </div>
 <div class='user-posts'>
-  <h2>My posts</h2>
+  <h3>{{ user.first_name }} {{ user.last_name }}'s posts</h3>
   <div><a href="/users/{{ user.id }}/posts/new"><button>Add post</button></a></div>
   <ul>
     {% for post in posts %}
