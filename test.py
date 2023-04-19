@@ -51,8 +51,8 @@ class PostViewsTests(unittest.TestCase):
     user1 =  User(first_name = 'Bean', last_name = "Bo", image_url = "http://clipart-library.com/img/1015367.jpg")
     db.session.add(user1)
     db.session.commit()
-    post1 = Post(title = 'My title', content = 'My content', user_id = user1.id)
-    post2 = Post(title = 'My second title', content = 'My second content', user_id = user1.id)
+    post1 = Post(title = 'My post title', content = 'My post content', user_id = user1.id)
+    post2 = Post(title = 'My second post title', content = 'My second content', user_id = user1.id)
     db.session.add_all([post1,post2])
     db.session.commit()
     self.user_id=user1.id
@@ -67,8 +67,8 @@ class PostViewsTests(unittest.TestCase):
       resp = client.get("/")
       html = resp.get_data(as_text=True)
       self.assertEqual(resp.status_code, 200)
-      self.assertIn('My title', html)
-      self.assertIn('My second title', html)
+      self.assertIn('My post title', html)
+      self.assertIn('My second post title', html)
 
   def test_details_post(self):
     """ Test if user details show up on details page"""
@@ -76,7 +76,7 @@ class PostViewsTests(unittest.TestCase):
       resp = client.get(f"/posts/{self.post1_id}")
       html = resp.get_data(as_text=True)
       self.assertEqual(resp.status_code, 200)
-      self.assertIn('My title', html)
+      self.assertIn('My post title', html)
       self.assertIn('<button>Edit post</button>', html)
 
   def test_delete_post(self):
@@ -85,7 +85,7 @@ class PostViewsTests(unittest.TestCase):
       resp = client.post(f"/posts/{self.post1_id}/delete", follow_redirects=True)
       html = resp.get_data(as_text=True)
       self.assertEqual(resp.status_code, 200)
-      self.assertNotIn('My title', html)
+      self.assertNotIn('My post title', html)
 
 class TagViewsTests(unittest.TestCase):
   def setUp(self):
@@ -94,7 +94,7 @@ class TagViewsTests(unittest.TestCase):
     user1 =  User(first_name = 'Bean', last_name = "Bo", image_url = "http://clipart-library.com/img/1015367.jpg")
     db.session.add(user1)
     db.session.commit()
-    post1 = Post(title = 'My title', content = 'My content', user_id = user1.id)
+    post1 = Post(title = 'My post title', content = 'My content', user_id = user1.id)
     post2 = Post(title = 'My second title', content = 'My second content', user_id = user1.id)
     db.session.add_all([post1,post2])
     db.session.commit()
@@ -131,7 +131,7 @@ class TagViewsTests(unittest.TestCase):
       resp = client.get(f"/posts/{self.post1_id}")
       html = resp.get_data(as_text=True)
       self.assertEqual(resp.status_code, 200)
-      self.assertIn('My title', html)
+      self.assertIn('My post title', html)
       self.assertIn('<span class="tag">eww</span>', html)
 
   def test_delete_tag(self):

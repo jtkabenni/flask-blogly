@@ -17,7 +17,7 @@ class User(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     image_url = db.Column(db.String(150), nullable=True, default = default_img)
-
+    # posts will be deleted once a user is deleted
     posts = db.relationship("Post", backref="user", passive_deletes=True)
 
 class Post(db.Model):
@@ -27,9 +27,10 @@ class Post(db.Model):
     title = db.Column(db.String(50), nullable=False)
     content = db.Column(db.String(1500), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default = datetime.utcnow)
+    # when user is deleted, all posts will be deleted too 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
 
-    posttags = db.relationship('PostTag', backref = 'post', cascade="all, delete, delete-orphan")
+    posttags = db.relationship('PostTag', backref = 'post', passive_deletes=True)
     tags = db.relationship('Tag', secondary = 'posttags', backref = 'posts')
 
 
